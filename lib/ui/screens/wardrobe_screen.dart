@@ -4,11 +4,17 @@ import 'package:get/get.dart';
 import 'package:glamourous/controllers/wardrobe_controller.dart';
 import 'package:glamourous/models/category.dart';
 
-class WardrobeScreen extends StatelessWidget {
-  WardrobeScreen({super.key});
+class WardrobeScreen extends StatefulWidget {
+  const WardrobeScreen({super.key});
+  
+  @override
+  State<StatefulWidget> createState() => _WardrobeScreenState();
+}
 
+class _WardrobeScreenState extends State<WardrobeScreen> {
   // Initialize the controller
   final WardrobeController controller = Get.put(WardrobeController());
+  int selectedIndex = 0;
 
   // Define accent color for consistency
   final Color accentColor = Colors.teal; // Example teal, adjust as desired
@@ -67,27 +73,28 @@ class WardrobeScreen extends StatelessWidget {
                 itemCount: controller.categories.length,
                 itemBuilder: (context, index) {
                   Category category = controller.categories[index];
-                  bool isSelected = controller.selectedCategory.value?.id == category.id;
                   return GestureDetector(
                     onTap: (){
                       controller.changeCategory(category);
-                      
+                      setState(() {
+                        selectedIndex = index;
+                      });
                     },
                     child: Container(
                       alignment: Alignment.center,
                       margin: const EdgeInsets.symmetric(horizontal: 8.0),
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       decoration: BoxDecoration(
-                        color: isSelected ? accentColor.withOpacity(0.15) : Colors.transparent,
+                        color: selectedIndex == index  ? accentColor.withOpacity(0.15) : Colors.transparent,
                         borderRadius: BorderRadius.circular(8.0),
                         border: Border.all(
-                            color: isSelected ? accentColor : Colors.transparent, width: 1.0),
+                            color: selectedIndex == index ? accentColor : Colors.transparent, width: 1.0),
                       ),
                       child: Text(
                         category.name,
                         style: TextStyle(
-                          color: isSelected ? accentColor : Colors.grey[700],
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          color: selectedIndex == index  ? accentColor : Colors.grey[700],
+                          fontWeight: selectedIndex == index  ? FontWeight.bold : FontWeight.normal,
                           fontFamily: 'Roboto',
                         ),
                       ),

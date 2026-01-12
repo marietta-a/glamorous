@@ -31,7 +31,7 @@ class WardrobeController extends GetxController {
   void filterByCategory(Category category){
     try{
       if(category == mockCategories.first){
-        filteredCategories.assignAll(categories);
+        filteredCategories.assignAll(mockCategories);
         wardrobeItems.assignAll(mockWardrobeItems);
         return;
       }
