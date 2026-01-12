@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:glamourous/routes/app_pages.dart';
 import 'package:glamourous/ui/screens/wardrobe_screen.dart';
 
 void main() {
@@ -27,14 +28,7 @@ class MainApp extends StatelessWidget {
         ),
       ),
       initialRoute: '/',
-      getPages: [
-        GetPage(name: '/', page: () => WardrobeScreen()),
-        // Define other pages here for GetX routing
-        // GetPage(name: '/addItem', page: () => AddItemScreen()),
-        // GetPage(name: '/itemDetails', page: () => ItemDetailScreen()),
-        // GetPage(name: '/outfits', page: () => OutfitsScreen()),
-        // GetPage(name: '/settings', page: () => SettingsScreen()),
-      ],
+      getPages: AppPages.routes,
     );
   }
 }
