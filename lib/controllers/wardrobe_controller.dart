@@ -31,13 +31,13 @@ class WardrobeController extends GetxController {
   void filterByCategory(Category category){
     try{
       if(category == mockCategories.first){
-        filteredCategories.assignAll(categories);
+        filteredCategories.assignAll(mockCategories);
         wardrobeItems.assignAll(mockWardrobeItems);
         return;
       }
-      filteredCategories.assignAll(categories.where((cat) => cat.id == category.id).toList());
+      filteredCategories.assignAll(categories.where((cat) => cat.name.toLowerCase() == category.name.toLowerCase()).toList());
       wardrobeItems.assignAll(mockWardrobeItems.where((b) =>
-                        filteredCategories.any((cat) => cat.id == b.categoryId)
+                        filteredCategories.any((cat) => cat.name.toLowerCase() == b.category.toLowerCase())
                       ).toList());
     }
     catch(err){
