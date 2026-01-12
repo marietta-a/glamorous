@@ -35,9 +35,9 @@ class WardrobeController extends GetxController {
         wardrobeItems.assignAll(mockWardrobeItems);
         return;
       }
-      filteredCategories.assignAll(categories.where((cat) => cat.id == category.id).toList());
+      filteredCategories.assignAll(categories.where((cat) => cat.name.toLowerCase() == category.name.toLowerCase()).toList());
       wardrobeItems.assignAll(mockWardrobeItems.where((b) =>
-                        filteredCategories.any((cat) => cat.id == b.categoryId)
+                        filteredCategories.any((cat) => cat.name.toLowerCase() == b.category.toLowerCase())
                       ).toList());
     }
     catch(err){
