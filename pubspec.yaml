@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  get: ^4.7.3
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
