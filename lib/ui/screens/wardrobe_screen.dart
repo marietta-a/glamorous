@@ -1,4 +1,4 @@
-// --- My Wardrobe Screen Widget ---
+// --- Updated Wardrobe Screen Widget ---
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glamourous/controllers/wardrobe_controller.dart';
@@ -7,29 +7,31 @@ import 'package:glamourous/routes/app_routes.dart';
 
 class WardrobeScreen extends StatefulWidget {
   const WardrobeScreen({super.key});
-  
+
   @override
   State<StatefulWidget> createState() => _WardrobeScreenState();
 }
 
 class _WardrobeScreenState extends State<WardrobeScreen> {
-  // Initialize the controller
   final WardrobeController controller = Get.put(WardrobeController());
   int selectedIndex = 0;
+  final Color accentColor = const Color(0xFF26A69A); // Matching the teal in the image
 
-  // Define accent color for consistency
-  final Color accentColor = Colors.teal; // Example teal, adjust as desired
+  // GlobalKey to open the drawer
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey, // Attach the key here
+      drawer: _buildDrawer(), // Define the drawer below
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.black),
           onPressed: () {
-            // Handle hamburger menu press (e.g., open drawer)
+            _scaffoldKey.currentState?.openDrawer(); // Opens the menu
           },
         ),
         title: const Text(
@@ -37,7 +39,7 @@ class _WardrobeScreenState extends State<WardrobeScreen> {
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Roboto', // Or your chosen sans-serif font
+            fontFamily: 'Roboto',
           ),
         ),
         centerTitle: true,
@@ -45,17 +47,14 @@ class _WardrobeScreenState extends State<WardrobeScreen> {
           Container(
             margin: const EdgeInsets.only(right: 16.0),
             child: ElevatedButton(
-              onPressed: () {
-                // Handle Add Item (+) button press
-                Get.toNamed('/addItem'); // Example navigation
-              },
+              onPressed: () => Get.toNamed('/addItem'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: accentColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                padding: EdgeInsets.zero, // Remove default padding
-                minimumSize: const Size(40, 40), // Set specific size
+                padding: EdgeInsets.zero,
+                minimumSize: const Size(40, 40),
               ),
               child: const Icon(Icons.add, color: Colors.white, size: 24),
             ),
@@ -70,126 +69,191 @@ class _WardrobeScreenState extends State<WardrobeScreen> {
             color: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Obx(() => ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: controller.categories.length,
-                itemBuilder: (context, index) {
-                  Category category = controller.categories[index];
-                  return GestureDetector(
-                    onTap: (){
-                      controller.changeCategory(category);
-                      setState(() {
-                        selectedIndex = index;
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      decoration: BoxDecoration(
-                        color: selectedIndex == index  ? accentColor.withOpacity(0.15) : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8.0),
-                        border: Border.all(
-                            color: selectedIndex == index ? accentColor : Colors.transparent, width: 1.0),
-                      ),
-                      child: Text(
-                        category.name,
-                        style: TextStyle(
-                          color: selectedIndex == index  ? accentColor : Colors.grey[700],
-                          fontWeight: selectedIndex == index  ? FontWeight.bold : FontWeight.normal,
-                          fontFamily: 'Roboto',
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.categories.length,
+                  itemBuilder: (context, index) {
+                    Category category = controller.categories[index];
+                    return GestureDetector(
+                      onTap: () {
+                        controller.changeCategory(category);
+                        setState(() {
+                          selectedIndex = index;
+                        });
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        decoration: BoxDecoration(
+                          color: selectedIndex == index
+                              ? accentColor.withOpacity(0.15)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(8.0),
+                          border: Border.all(
+                              color: selectedIndex == index
+                                  ? accentColor
+                                  : Colors.transparent,
+                              width: 1.0),
+                        ),
+                        child: Text(
+                          category.name,
+                          style: TextStyle(
+                            color: selectedIndex == index
+                                ? accentColor
+                                : Colors.grey[700],
+                            fontWeight: selectedIndex == index
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            fontFamily: 'Roboto',
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              )
-            ),
+                    );
+                  },
+                )),
           ),
-          const Divider(height: 1, color: Colors.grey), // Separator below tabs
+          const Divider(height: 1, color: Colors.grey),
           // Wardrobe Items Grid
           Expanded(
-            child: Obx( () =>  GridView.builder(
-              padding: const EdgeInsets.all(16.0),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
-                childAspectRatio: 0.85, // Adjust to make cards slightly taller for text
-              ),
-              itemCount: controller.wardrobeItems.length, // Display all for now
-              itemBuilder: (context, index) {
-                final item = controller.wardrobeItems[index];
-                return GestureDetector(
-                  onTap: () {
-                    // Navigate to individual item view
-                    Get.toNamed(Routes.ITEM_DETAILS, arguments: [ item ]);
-                  },
-                  child: Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: ClipRRect(
-                            borderRadius:
-                                const BorderRadius.vertical(top: Radius.circular(12.0)),
-                            child: Image.network(
-                              item.imageUrl!,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.broken_image, size: 50, color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            item.name,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey[800],
-                              fontFamily: 'Roboto',
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+            child: Obx(() => GridView.builder(
+                  padding: const EdgeInsets.all(16.0),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16.0,
+                    mainAxisSpacing: 16.0,
+                    childAspectRatio: 0.85,
                   ),
-                );
-              },
-            )),
+                  itemCount: controller.wardrobeItems.length,
+                  itemBuilder: (context, index) {
+                    final item = controller.wardrobeItems[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.ITEM_DETAILS, arguments: [item]);
+                      },
+                      child: Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(12.0)),
+                                child: Image.network(
+                                  item.imageUrl!,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      const Icon(Icons.broken_image,
+                                          size: 50, color: Colors.grey),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                item.name,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey[800],
+                                  fontFamily: 'Roboto',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                )),
           ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0, // Currently on Wardrobe
+        currentIndex: 0,
         onTap: (index) {
-          if (index == 0) {
-            // Already on Wardrobe
-          } else if (index == 1) {
-            Get.toNamed(Routes.OUTFITS); // Navigate to Outfits screen
-          }
+          if (index == 1) Get.toNamed(Routes.OUTFITS);
         },
         selectedItemColor: accentColor,
         unselectedItemColor: Colors.grey[600],
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
-        unselectedLabelStyle: const TextStyle(fontFamily: 'Roboto'),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.checkroom), // Hanger icon
-            label: 'Wardrobe',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.auto_fix_high), // Magic wand icon
-            label: 'Outfits',
-          ),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.checkroom), label: 'Wardrobe'),
+          BottomNavigationBarItem(icon: Icon(Icons.auto_fix_high), label: 'Outfits'),
         ],
       ),
+    );
+  }
+
+  // --- UI Component for the Menu Drawer ---
+  Widget _buildDrawer() {
+    return Drawer(
+      width: MediaQuery.of(context).size.width * 0.75, // Adjust width
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(25),
+          bottomRight: Radius.circular(25),
+        ),
+      ),
+      child: Column(
+        children: [
+          // Header Section
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: accentColor.withOpacity(0.1),
+                  child: Icon(Icons.person_outline, color: accentColor, size: 35),
+                ),
+                const SizedBox(width: 15),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'John Doe',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'john.doe@email.com',
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const Divider(indent: 20, endIndent: 20),
+          // Menu Items
+          _drawerItem(Icons.person_outline, 'My Profile', () {}),
+          _drawerItem(Icons.settings_outlined, 'Settings', () {}),
+          _drawerItem(Icons.help_outline, 'Help & Support', () {}),
+          const Spacer(), // Pushes Log Out to bottom
+          _drawerItem(Icons.door_front_door_outlined, 'Log Out', () {
+            // Handle log out logic
+          }),
+          const SizedBox(height: 30),
+        ],
+      ),
+    );
+  }
+
+  Widget _drawerItem(IconData icon, String title, VoidCallback onTap) {
+    return ListTile(
+      leading: Icon(icon, color: accentColor),
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 16,
+        ),
+      ),
+      onTap: onTap,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
     );
   }
 }
