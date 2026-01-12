@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glamourous/controllers/wardrobe_controller.dart';
 import 'package:glamourous/models/category.dart';
+import 'package:glamourous/routes/app_routes.dart';
 
 class WardrobeScreen extends StatefulWidget {
   const WardrobeScreen({super.key});
@@ -121,7 +122,7 @@ class _WardrobeScreenState extends State<WardrobeScreen> {
                 return GestureDetector(
                   onTap: () {
                     // Navigate to individual item view
-                    Get.toNamed('/itemDetails', arguments: item);
+                    Get.toNamed(Routes.ITEM_DETAILS, arguments: [ item ]);
                   },
                   child: Card(
                     elevation: 2,
@@ -171,7 +172,7 @@ class _WardrobeScreenState extends State<WardrobeScreen> {
           if (index == 0) {
             // Already on Wardrobe
           } else if (index == 1) {
-            Get.toNamed('/outfits'); // Navigate to Outfits screen
+            Get.toNamed(Routes.OUTFITS); // Navigate to Outfits screen
           }
         },
         selectedItemColor: accentColor,
