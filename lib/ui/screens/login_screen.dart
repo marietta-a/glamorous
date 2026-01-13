@@ -21,9 +21,11 @@ class LoginScreen extends StatelessWidget {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               "Glamourous", 
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: accentColor)
             ),
             const SizedBox(height: 40),
@@ -33,13 +35,13 @@ class LoginScreen extends StatelessWidget {
               decoration: const InputDecoration(labelText: "Email")
             ),
             
-            // 2. Wrap the Password TextField with Obx
+            const SizedBox(height: 16),
+            
             Obx(() => TextField(
               controller: passwordController, 
-              obscureText: isPasswordObscured.value, // Bind the value
+              obscureText: isPasswordObscured.value,
               decoration: InputDecoration(
                 labelText: "Password",
-                // 3. Add the toggle icon
                 suffixIcon: IconButton(
                   icon: Icon(
                     isPasswordObscured.value 
@@ -48,7 +50,7 @@ class LoginScreen extends StatelessWidget {
                     color: Colors.grey,
                   ),
                   onPressed: () {
-                    isPasswordObscured.toggle(); // Switch the state
+                    isPasswordObscured.toggle();
                   },
                 ),
               ),
@@ -57,7 +59,7 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: 30),
             
             Obx(() => authController.isLoading.value 
-              ? CircularProgressIndicator(color: accentColor)
+              ? Center(child: CircularProgressIndicator(color: accentColor))
               : ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: accentColor, 
@@ -70,11 +72,20 @@ class LoginScreen extends StatelessWidget {
                   child: const Text("Log In", style: TextStyle(color: Colors.white)),
                 )),
             
-            TextButton(
-              onPressed: () => Get.toNamed(Routes.SIGNUP),
-              child: Text(
-                "Don't have an account? Sign Up", 
-                style: TextStyle(color: accentColor)
+            Center(
+              child: TextButton(
+                onPressed: () => Get.toNamed(Routes.FORGOT_PASSWORD),
+                child: Text("Forgot Password?", style: TextStyle(color: accentColor)),
+              ),
+            ),
+
+            Center(
+              child: TextButton(
+                onPressed: () => Get.toNamed(Routes.SIGNUP),
+                child: Text(
+                  "Don't have an account? Sign Up", 
+                  style: TextStyle(color: accentColor)
+                ),
               ),
             )
           ],

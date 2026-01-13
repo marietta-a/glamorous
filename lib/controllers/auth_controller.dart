@@ -10,14 +10,52 @@ class AuthController extends GetxController {
   var currentUser = Rxn<User>();
   var isLoading = false.obs;
 
+ 
   @override
   void onInit() {
     super.onInit();
-    // Listen to auth state changes (login/logout)
     _client.auth.onAuthStateChange.listen((data) {
       final Session? session = data.session;
       currentUser.value = session?.user;
+
+      // detect if the user clicked a "Reset Password" link
+      if (data.event == AuthChangeEvent.passwordRecovery) {
+        Get.toNamed(Routes.UPDATE_PASSWORD);
+      }
     });
+  }
+
+  // Phase 1: Send Reset Email
+  Future<void> sendPasswordReset(String email) async {
+    try {
+      isLoading.value = true;
+      await _client.auth.resetPasswordForEmail(
+        email,
+        redirectTo: 'glamourous://callback', // Must match your Deep Link config
+      );
+      Get.snackbar("Success", "Password reset link sent to your email.");
+      Get.back(); 
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Phase 2: Save New Password
+  Future<void> updatePassword(String newPassword) async {
+    try {
+      isLoading.value = true;
+      await _client.auth.updateUser(
+        UserAttributes(password: newPassword),
+      );
+      Get.snackbar("Success", "Password updated successfully!");
+      Get.offAllNamed(Routes.LOGIN);
+    } catch (e) {
+      Get.snackbar("Update Failed", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   // --- Sign Up ---

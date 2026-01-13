@@ -4,10 +4,12 @@ import 'package:glamourous/middleware/auth_middleware.dart';
 import 'package:glamourous/models/wardrobe_item.dart';
 import 'package:glamourous/routes/app_routes.dart';
 import 'package:glamourous/ui/screens/add_item_screen.dart';
+import 'package:glamourous/ui/screens/forgot_password_screen.dart';
 import 'package:glamourous/ui/screens/item_details_screen.dart';
 import 'package:glamourous/ui/screens/login_screen.dart';
 import 'package:glamourous/ui/screens/outfit_screen.dart';
 import 'package:glamourous/ui/screens/sign_up_screen.dart';
+import 'package:glamourous/ui/screens/update_password_screen.dart';
 import 'package:glamourous/ui/screens/wardrobe_screen.dart';
 
 class AppPages {
@@ -23,6 +25,16 @@ class AppPages {
     GetPage(
       name: Routes.SIGNUP, 
       page: () => SignUpScreen(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: Routes.UPDATE_PASSWORD, 
+      page: () => UpdatePasswordScreen(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: Routes.FORGOT_PASSWORD, 
+      page: () => ForgotPasswordScreen(),
       transition: Transition.fadeIn,
     ),
     GetPage(
