@@ -47,7 +47,7 @@ class _WardrobeScreenState extends State<WardrobeScreen> {
           Container(
             margin: const EdgeInsets.only(right: 16.0),
             child: ElevatedButton(
-              onPressed: () => Get.toNamed('/addItem'),
+              onPressed: () => Get.toNamed(Routes.ADD_ITEM),
               style: ElevatedButton.styleFrom(
                 backgroundColor: accentColor,
                 shape: RoundedRectangleBorder(
@@ -254,6 +254,128 @@ class _WardrobeScreenState extends State<WardrobeScreen> {
       ),
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+    );
+  }
+
+  void _showAddItemMenu(BuildContext context) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Color(0xFFF5F7F8), // Light grey background
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'My Wardrobe',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: Icon(Icons.cancel_outlined, color: accentColor, size: 28),
+                  onPressed: () => Get.back(),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+
+            // 1. Question Card
+            _buildMenuCard(
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                child: Text(
+                  'What would you like to add?',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+
+            // 2. Single Item Card
+            GestureDetector(
+              onTap: () {
+                Get.back(); // Close menu
+                Get.toNamed('/addItem'); // Navigate to your add item screen
+              },
+              child: _buildMenuCard(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.checkroom_outlined, size: 50, color: accentColor),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Single Item', 
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                            Text('Add one piece of clothing, shoes, or accessory at a time.',
+                              style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            // 3. Full Closet Card
+            _buildMenuCard(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Icon(Icons.grid_view_rounded, size: 50, color: accentColor),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Full Closet/Section', 
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                          Text('Capture a photo of multiple items, and we\'ll segment them all.',
+                              style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  // Helper widget to keep code clean and maintain consistent card styling
+  Widget _buildMenuCard({required Widget child}) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: child,
     );
   }
 }
