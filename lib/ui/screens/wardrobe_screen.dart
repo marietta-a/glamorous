@@ -1,6 +1,7 @@
 // --- Updated Wardrobe Screen Widget ---
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:glamourous/controllers/auth_controller.dart';
 import 'package:glamourous/controllers/wardrobe_controller.dart';
 import 'package:glamourous/models/category.dart';
 import 'package:glamourous/routes/app_routes.dart';
@@ -14,6 +15,7 @@ class WardrobeScreen extends StatefulWidget {
 
 class _WardrobeScreenState extends State<WardrobeScreen> {
   final WardrobeController controller = Get.put(WardrobeController());
+  final AuthController authController = Get.put(AuthController());
   int selectedIndex = 0;
   final Color accentColor = const Color(0xFF26A69A); // Matching the teal in the image
 
@@ -198,47 +200,49 @@ class _WardrobeScreenState extends State<WardrobeScreen> {
           bottomRight: Radius.circular(25),
         ),
       ),
-      child: Column(
-        children: [
-          // Header Section
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: accentColor.withOpacity(0.1),
-                  child: Icon(Icons.person_outline, color: accentColor, size: 35),
-                ),
-                const SizedBox(width: 15),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'John Doe',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'john.doe@email.com',
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
-              ],
+      child: Obx(
+        () => Column(
+          children: [
+            // Header Section
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: accentColor.withOpacity(0.1),
+                    child: Icon(Icons.person_outline, color: accentColor, size: 35),
+                  ),
+                  const SizedBox(width: 15),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // const Text(
+                      //   'John Doe',
+                      //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      // ),
+                      Text(
+                        authController.currentUser.value?.email ?? '',
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Divider(indent: 20, endIndent: 20),
-          // Menu Items
-          _drawerItem(Icons.person_outline, 'My Profile', () {}),
-          _drawerItem(Icons.settings_outlined, 'Settings', () {}),
-          _drawerItem(Icons.help_outline, 'Help & Support', () {}),
-          const Spacer(), // Pushes Log Out to bottom
-          _drawerItem(Icons.door_front_door_outlined, 'Log Out', () {
-            // Handle log out logic
-          }),
-          const SizedBox(height: 30),
-        ],
-      ),
+            const Divider(indent: 20, endIndent: 20),
+            // Menu Items
+            _drawerItem(Icons.person_outline, 'My Profile', () {}),
+            _drawerItem(Icons.settings_outlined, 'Settings', () {}),
+            _drawerItem(Icons.help_outline, 'Help & Support', () {}),
+            const Spacer(), // Pushes Log Out to bottom
+            _drawerItem(Icons.door_front_door_outlined, 'Log Out', () {
+              authController.signOut();
+            }),
+            const SizedBox(height: 30),
+          ],
+        ),
+      )
     );
   }
 

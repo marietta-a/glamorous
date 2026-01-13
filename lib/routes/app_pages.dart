@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:glamourous/middleware/auth_middleware.dart';
 import 'package:glamourous/models/wardrobe_item.dart';
 import 'package:glamourous/routes/app_routes.dart';
 import 'package:glamourous/ui/screens/add_item_screen.dart';
 import 'package:glamourous/ui/screens/item_details_screen.dart';
+import 'package:glamourous/ui/screens/login_screen.dart';
 import 'package:glamourous/ui/screens/outfit_screen.dart';
+import 'package:glamourous/ui/screens/sign_up_screen.dart';
 import 'package:glamourous/ui/screens/wardrobe_screen.dart';
 
 class AppPages {
@@ -13,9 +16,19 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: Routes.WARDROBE,
+      name: Routes.LOGIN, 
+      page: () => LoginScreen(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: Routes.SIGNUP, 
+      page: () => SignUpScreen(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: Routes.WARDROBE, 
       page: () => WardrobeScreen(),
-      // transition: Transition.fadeIn,
+      middlewares: [AuthMiddleware()], // Protect this route
     ),
     GetPage(
       name: Routes.OUTFITS,
