@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glamourous/models/wardrobe_item.dart';
 import 'package:glamourous/routes/app_routes.dart';
+import 'package:glamourous/ui/screens/add_item_screen.dart';
 import 'package:glamourous/ui/screens/item_details_screen.dart';
 import 'package:glamourous/ui/screens/outfit_screen.dart';
 import 'package:glamourous/ui/screens/wardrobe_screen.dart';
@@ -32,7 +33,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.ADD_ITEM,
-      page: () => const Scaffold(body: Center(child: Text("Add Item"))),
+      page: () => AddItemScreen(),
     ),
   ];
 }
