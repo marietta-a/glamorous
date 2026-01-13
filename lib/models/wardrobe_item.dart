@@ -1,5 +1,6 @@
 class WardrobeItem {
   final String id;                  // Unique identifier
+  final String userId;                  // Unique identifier
   final String name;                // Item name (e.g., "Denim Jeans")
   final String category;            // Category (e.g., "Outerwear")
   final String? subCategory;        // Sub-category (e.g., "Denim Jacket")
@@ -22,6 +23,7 @@ class WardrobeItem {
     required this.id,
     required this.name,
     required this.category,
+    required this.userId,
     this.subCategory,
     this.primaryColor,
     this.secondaryColors,
@@ -43,6 +45,7 @@ class WardrobeItem {
   factory WardrobeItem.fromJson(Map<String, dynamic> json) {
     return WardrobeItem(
       id: json['item_id'] as String,
+      userId: json['user_id'] as String,
       name: json['name'] as String,
       category: json['category'] as String,
       subCategory: json['sub_category'] as String?,
@@ -77,6 +80,7 @@ class WardrobeItem {
   Map<String, dynamic> toJson() {
     return {
       'item_id': id,
+      'user_id': userId,
       'name': name,
       'category': category,
       'sub_category': subCategory,
@@ -102,6 +106,7 @@ class WardrobeItem {
 final List<WardrobeItem> mockWardrobeItems = [
   WardrobeItem(
     id: 'item1',
+    userId: "user123",
     name: 'Blue Denim Jeans',
     category: 'Bottoms',
     subCategory: 'Jeans',
@@ -122,6 +127,7 @@ final List<WardrobeItem> mockWardrobeItems = [
   ),
   WardrobeItem(
     id: 'item2',
+    userId: "user123",
     name: 'Leather Jacket',
     category: 'Outerwear',
     subCategory: 'Jacket',
@@ -141,6 +147,7 @@ final List<WardrobeItem> mockWardrobeItems = [
   ),
   WardrobeItem(
     id: 'item3',
+    userId: "user123",
     name: 'White Sneakers',
     category: 'Shoes',
     subCategory: 'Sneakers',
@@ -161,6 +168,7 @@ final List<WardrobeItem> mockWardrobeItems = [
   ),
   WardrobeItem(
     id: 'item4',
+    userId: "user123",
     name: 'Red Summer Dress',
     category: 'Dresses',
     subCategory: 'Dress',
@@ -181,6 +189,7 @@ final List<WardrobeItem> mockWardrobeItems = [
   ),
   WardrobeItem(
     id: 'item5',
+    userId: "user123",
     name: 'Gold Necklace',
     category: 'Accessories',
     subCategory: 'Jewelry',
@@ -200,6 +209,7 @@ final List<WardrobeItem> mockWardrobeItems = [
   ),
   WardrobeItem(
     id: 'item6',
+    userId: "user123",
     name: 'Gray Hoodie',
     category: 'Tops',
     subCategory: 'Hoodie',
